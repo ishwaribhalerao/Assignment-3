@@ -1,39 +1,71 @@
-function mergesort(arr) {
-    if (arr.length === 1) {
-        return arr;
-    }
+public class MergeSort {
 
-    let mid = Math.floor(arr.length / 2);
-    let left = mergesort(arr.slice(0, mid));
-    let right = mergesort(arr.slice(mid));
+    void merge(int arr[], int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
 
-    return merge(left, right);
-}
+        int L[] = new int[n1];
+        int R[] = new int[n2];
 
-function merge(first, second) {
-    let mix = [];
-    let i = 0, j = 0;
+        for (int i = 0; i < n1; ++i)
+            L[i] = arr[left + i];
+        for (int j = 0; j < n2; ++j)
+            R[j] = arr[mid + 1 + j];
 
-    while (i < first.length && j < second.length) {
-        if (first[i] < second[j]) {
-            mix.push(first[i++]);
-        } else {
-            mix.push(second[j++]);
+        int i = 0, j = 0;
+        int k = left;
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j]) {
+                arr[k] = L[i];
+                i++;
+            } else {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            arr[k] = R[j];
+            j++;
+            k++;
         }
     }
-    while (i < first.length) {
-        mix.push(first[i++]);
+
+    void mergeSort(int arr[], int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
+
+            merge(arr, left, mid, right);
+        }
     }
-    while (j < second.length) {
-        mix.push(second[j++]);
+
+    static void printArray(int arr[]) {
+        for (int i = 0; i < arr.length; i++)
+            System.out.print(arr[i] + " ");
+        System.out.println();
     }
-    return mix;
+
+    public static void main(String args[]) {
+        int arr[] = {38, 27, 43, 3, 9, 82, 10};
+
+        System.out.println("Original array:");
+        printArray(arr);
+
+        MergeSort ms = new MergeSort();
+        ms.mergeSort(arr, 0, arr.length - 1);
+
+        System.out.println("\nSorted array:");
+        printArray(arr);
+    }
 }
 
-function result() {
-    let arr = [4 , 8 , 1 ,20 , 9 , 5];
-    let sortedArr = mergesort(arr);
-    console.log(sortedArr);
-}
-
-result();
